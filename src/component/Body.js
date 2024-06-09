@@ -66,7 +66,7 @@ const Body = () => {
     console.log("Fetching data...");
     try {
       const response = await fetch(
-        "https://www.swiggy.com/mapi/homepage/getCards?lat=27.1774553&lng=78.0077653"
+        " https://www.swiggy.com/mapi/homepage/getCards?lat=27.1774553&lng=78.0077653"
       );
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
