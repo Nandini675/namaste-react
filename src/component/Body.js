@@ -1,6 +1,7 @@
 import Restrocard from './Restrocards';
 import reslist from '../utils/mocdata';
 import { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import Shimmer from './Shimmer';
 
 const Body = () => {
@@ -66,7 +67,7 @@ const Body = () => {
     console.log("Fetching data...");
     try {
       const response = await fetch(
-        " https://www.swiggy.com/mapi/homepage/getCards?lat=27.1774553&lng=78.0077653"
+        "https://www.swiggy.com/dapi/restaurants/list/v5?lat=12.96340&lng=77.58558&is-seo-homepage-enabled=true&page_type=DESKTOP_WEB_LISTING"
       );
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
@@ -75,10 +76,10 @@ const Body = () => {
       console.log(json);
 
       // Accessing nested properties safely
-    console.log( json?.data?.success?.cards[1]?.gridWidget?.gridElements?.infoWithStyle?.restaurants
+    console.log(  json?.data?.cards[1]?.card?.card?.gridElements?.infoWithStyle?.restaurants
     );
-    setListofrestro( json?.data?.success?.cards[1]?.gridWidget?.gridElements?.infoWithStyle?.restaurants);
-    setfilterrestro( json?.data?.success?.cards[1]?.gridWidget?.gridElements?.infoWithStyle?.restaurants);
+    setListofrestro(  json?.data?.cards[1]?.card?.card?.gridElements?.infoWithStyle?.restaurants);
+    setfilterrestro(  json?.data?.cards[1]?.card?.card?.gridElements?.infoWithStyle?.restaurants);
     } catch (error) {
       console.error("Error fetching data:", error);
     }
@@ -140,7 +141,8 @@ const Body = () => {
         {/* prop are just like arguments to ur function */}
         {filterrestro &&
           filterrestro.map((restraunt) => (
-            <Restrocard key={restraunt.info.id} resdata={restraunt} />
+           <Link key={restraunt.info.id}
+            to= {"/restraunts/"+restraunt.info.id}><Restrocard   resdata={restraunt} /></Link> 
           ))}
       </div>
     </div>

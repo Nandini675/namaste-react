@@ -1,10 +1,12 @@
 import { LOGO_URL } from "../utils/constants";
 import { useState,useEffect } from "react";
+import { Link } from "react-router-dom";
 const Header =()=>{
 //  let btnname= "login";
-const [btnnamereact,setbtnnamereact] = useState("Login");
+
 console.log("header render");
-useEffect(()=>{console.log("useeffect called");},[]
+const [btnnamereact,setbtnnamereact] = useState("Login");
+useEffect(()=>{console.log("useeffect called");},[btnnamereact]
 );
 
 
@@ -15,9 +17,10 @@ useEffect(()=>{console.log("useeffect called");},[]
                </div>
                <div className=" nav-items">
                    <ul>
-                       <li>Home</li>
-                       <li> Aboutus</li>
-                       <li>contact-us</li>
+                       <li> <Link to ="/">
+                       Home </Link></li>
+                       <li><Link to="/about">About Us</Link></li>
+                       <li> <Link to ="/contact">contact-us</Link></li>
                        <li> cart</li>
                        <button className="log" onClick={()=>{  btnnamereact=="Login"?setbtnnamereact("Logout") : setbtnnamereact("Login");
                         // console.log(btnnamereact);
