@@ -1,4 +1,4 @@
-import React from"react";
+import React ,{lazy , Suspense}from"react";
 import ReactDOM from "react-dom/client";
 import Header from "./component/Header";// if u dont put extension over here still it will work
 import Body from "./component/Body";
@@ -7,7 +7,14 @@ import About from "./component/About";
 import Contact from "./component/Contact";
 import Error from "./component/Error";
 import Restromenu from "./component/Restromenu";
-  const Applayout =()=>// 1st we will  build top level component
+//import Grocery from "./component/Grocery";
+ 
+
+const Grocery = lazy( ()=> import ("./component/Grocery"));
+
+
+
+const Applayout =()=>// 1st we will  build top level component
 {
     return(
         <div className="app">
@@ -37,7 +44,15 @@ children:[
   {
   path:"/contact",
 element:<Contact/>,
-},{
+},
+{
+  path:"/grocery",
+element: (<Suspense fallback={<h1>Loading.....</h1>}><Grocery/></Suspense>),
+},
+
+
+
+{
   path:"/restraunts/:resId",
   element:<Restromenu/>,
 }

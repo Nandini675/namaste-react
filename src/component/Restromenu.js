@@ -1,21 +1,14 @@
-import {useState,useEffect} from "react";
+import useRestromenu from "../utils/useRestromenu";
 import Shimmer from "./Shimmer";
 import { useParams } from "react-router-dom";
-import { MENU_API } from "../utils/constants";
+
 const  Restromenu =()=>{
  
- const[resinfo,setresinfo]=useState(null);
+//  const[resinfo,setresinfo]=useState(null);
  const {resId}=useParams();
+ const resinfo =useRestromenu(resId);
  
-  useEffect(()=>{
-          fetchmenu();
-      },[]);
-      const fetchmenu = async() =>{
-      const data = await  fetch( MENU_API+ resId);
-          const json = await data.json();
-          console.log(json);
-          setresinfo(json.data);
-    };
+
    
    if  (resinfo===null) return (<Shimmer />);
       const {name,cloudinaryImageId,cuisines,costForTwoMessage} = resinfo?.cards[2]?.card?.card?.info;

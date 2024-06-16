@@ -3,7 +3,7 @@ import reslist from '../utils/mocdata';
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import Shimmer from './Shimmer';
-
+import useOnlinestatus from '../utils/useOnlinestatus';
 const Body = () => {
   //  local state variable- superpowerful variable
   const [Listofrestro, setListofrestro] = useState([]);
@@ -80,7 +80,9 @@ const Body = () => {
     );
     setListofrestro(  json?.data?.cards[1]?.card?.card?.gridElements?.infoWithStyle?.restaurants);
     setfilterrestro(  json?.data?.cards[1]?.card?.card?.gridElements?.infoWithStyle?.restaurants);
-    } catch (error) {
+    
+  
+  } catch (error) {
       console.error("Error fetching data:", error);
     }
   };
@@ -94,6 +96,13 @@ const Body = () => {
   //         {
   // return <Shimmer/>;
   //         }
+
+  const onlinestatus = useOnlinestatus();
+  if(onlinestatus==false) return 
+  (
+  <h1>looks like u r offline, plz check ur internet connection</h1>
+
+  );
   return Listofrestro.length === 0 ? (
     <Shimmer />
   ) : (
