@@ -4,11 +4,14 @@ import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import Shimmer from './Shimmer';
 import useOnlinestatus from '../utils/useOnlinestatus';
+import useRestrolist from '../utils/useRestrolist';
+import { Restrocard_API } from '../utils/constants';
+// import useSearch from '../utils/useSearch';
+
 const Body = () => {
   //  local state variable- superpowerful variable
-  const [Listofrestro, setListofrestro] = useState([]);
-  const [searchText, setseachText] = useState('');
-  const [filterrestro, setfilterrestro] = useState([]);
+  // const [searchText, setseachText] = useState('');
+ 
   //jo bhi hum square bracket mai pass krenge vo iski default value ban jayegi
   //normal js varaiable
   // let Listofrestro;
@@ -59,44 +62,38 @@ const Body = () => {
       },
     },
   ];
-
+  const[filterrestro,setfilterrestro] = useState([]);
+  const [searchText,setseachText]= useState("");
 //   const [error, setError] = useState(null);
   console.log('Body');
 
-  const fetchdata = async () => {
-    console.log("Fetching data...");
-    try {
-      const response = await fetch(
-        "https://www.swiggy.com/dapi/restaurants/list/v5?lat=12.96340&lng=77.58558&is-seo-homepage-enabled=true&page_type=DESKTOP_WEB_LISTING"
-      );
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-      const json = await response.json();
-      console.log(json);
-
-      // Accessing nested properties safely
-    console.log(  json?.data?.cards[1]?.card?.card?.gridElements?.infoWithStyle?.restaurants
-    );
-    setListofrestro(  json?.data?.cards[1]?.card?.card?.gridElements?.infoWithStyle?.restaurants);
-    setfilterrestro(  json?.data?.cards[1]?.card?.card?.gridElements?.infoWithStyle?.restaurants);
-    
-  
-  } catch (error) {
-      console.error("Error fetching data:", error);
-    }
-  };
   useEffect(() => {
     fetchdata();
   }, []);
+  const fetchdata = async () => {
+      console.log("Fetching data...");
+      try {
+        const response = await fetch(Restrocard_API);
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const json = await response.json();
+        console.log(json);
+  
+        // Accessing nested properties safely
+      console.log(  json?.data?.cards[1]?.card?.card?.gridElements?.infoWithStyle?.restaurants
+      );
+      // setListofrestro(  json?.data?.cards[1]?.card?.card?.gridElements?.infoWithStyle?.restaurants);
+     setfilterrestro(  json?.data?.cards[1]?.card?.card?.gridElements?.infoWithStyle?.restaurants);
+      
+    
+    } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
 
-
-  //condition rendering
-  //        if(Listofrestro.length==0)
-  //         {
-  // return <Shimmer/>;
-  //         }
-
+ const Listofrestro = useRestrolist();
+//  const filterrestro = useSearch(Listofrestro);
   const onlinestatus = useOnlinestatus();
   if(onlinestatus==false) return 
   (
@@ -122,10 +119,11 @@ const Body = () => {
               //filter the restro cards and update the ui
               // search text
               console.log(searchText);
-              const filterlist = Listofrestro.filter((res) =>
-                res.info.name.toLowerCase().includes(searchText.toLowerCase())
-              );
+            const filterlist = Listofrestro.filter((res) =>
+                 res.info.name.toLowerCase().includes(searchText.toLowerCase())
+               );
               setfilterrestro(filterlist);
+            
             }}
           >
             search
