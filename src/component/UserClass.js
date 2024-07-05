@@ -4,10 +4,10 @@
         super(props);
         // console.log(props);
         this.state={ 
-            userinfo:"xyz",
-            location:"default"
+            userinfo:{ name:"xyz",
+            location:"default",}
         };
-         console.log( this.props.name+"child constructor");
+        //  console.log( this.props.name+"child constructor");
 
     }
     async componentDidMount() {
@@ -16,7 +16,7 @@
        this.setState({
             userinfo: data
         });
-        console.log(data);
+       // console.log(data);
     
     }
     fetchData = async (url) => {
@@ -32,11 +32,11 @@
         }
     }
     componentDidUpdate(){
-console.log("didupdte");
+// console.log("didupdte");
     }
     
    componentWillUnmount(){
-    console.log("unmount");
+    // console.log("unmount");
    } 
     render(){
          console.log(  this.props.name+"child render");

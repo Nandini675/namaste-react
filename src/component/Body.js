@@ -1,12 +1,11 @@
 import Restrocard from './Restrocards';
 import reslist from '../utils/mocdata';
-import { useEffect, useState } from 'react';
+import { useEffect, useState ,useContext} from 'react';
 import { Link } from 'react-router-dom';
 import Shimmer from './Shimmer';
 import useOnlinestatus from '../utils/useOnlinestatus';
-import useRestrolist from '../utils/useRestrolist';
 import { Restrocard_API } from '../utils/constants';
-// import useSearch from '../utils/useSearch';
+ import UserContext from '../utils/UserContext';
 
 const Body = () => {
   //  local state variable- superpowerful variable
@@ -62,10 +61,11 @@ const Body = () => {
       },
     },
   ];
+  const [Listofrestro, setListofrestro] = useState([]);
   const[filterrestro,setfilterrestro] = useState([]);
   const [searchText,setseachText]= useState("");
 //   const [error, setError] = useState(null);
-  console.log('Body');
+  // console.log('Body');
 
   useEffect(() => {
     fetchdata();
@@ -78,12 +78,12 @@ const Body = () => {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
         const json = await response.json();
-        console.log(json);
+        //  console.log(json);
   
         // Accessing nested properties safely
-      console.log(  json?.data?.cards[1]?.card?.card?.gridElements?.infoWithStyle?.restaurants
-      );
-      // setListofrestro(  json?.data?.cards[1]?.card?.card?.gridElements?.infoWithStyle?.restaurants);
+      // console.log(  json?.data?.cards[1]?.card?.card?.gridElements?.infoWithStyle?.restaurants
+      // );
+       setListofrestro(  json?.data?.cards[1]?.card?.card?.gridElements?.infoWithStyle?.restaurants);
      setfilterrestro(  json?.data?.cards[1]?.card?.card?.gridElements?.infoWithStyle?.restaurants);
       
     
@@ -92,7 +92,7 @@ const Body = () => {
       }
     };
 
- const Listofrestro = useRestrolist();
+
 //  const filterrestro = useSearch(Listofrestro);
   const onlinestatus = useOnlinestatus();
   if(onlinestatus==false) return 
@@ -100,25 +100,27 @@ const Body = () => {
   <h1>looks like u r offline, plz check ur internet connection</h1>
 
   );
+  const {setusername,loggedinuser}=useContext(UserContext);
   return Listofrestro.length === 0 ? (
     <Shimmer />
   ) : (
     <div className='body'>
-      <div className='filter'>
-        <div className='search'>
+      <div className='filter flex'>
+        <div className='search m-4 p-4'>
           <input
             type='text'
-            className='search-box'
+            className='border border- border-solid border-black  px-2'
             value={searchText}
             onChange={(e) => {
               setseachText(e.target.value);
             }}
           />
-          <button
+
+        <button className='px-4  py-2 m-4 bg-red-200 rounded-lg' 
             onClick={() => {
               //filter the restro cards and update the ui
               // search text
-              console.log(searchText);
+              // console.log(searchText);
             const filterlist = Listofrestro.filter((res) =>
                  res.info.name.toLowerCase().includes(searchText.toLowerCase())
                );
@@ -129,8 +131,8 @@ const Body = () => {
             search
           </button>
         </div>
-        <button
-          className='filter-btn'
+        <div className='search m-4 p-4 flex items-center'>
+        <button className=' px-4 py-2 m-4 bg-gray-100 rounded-lg'
           onClick={() => {
             //filter logic
             const filterli = Listofrestro.filter(
@@ -142,8 +144,17 @@ const Body = () => {
         >
           Top-rated-Restraunts
         </button>
+        </div>
+        {<div className='search m-4 p-4 flex items-center'>
+          <label className='m-2 p-2'>UserName:</label>
+       <input className=' border border- border-solid border-black  px-2'
+       value={loggedinuser}
+       onChange ={(e)=>setusername(e.target.value)}
+       ></input>
+        </div>}
+
       </div>
-      <div className=' restro-container'>
+      <div className=' restro-container flex flex-wrap '>
         {/* #restro card component (whenever we r using a stuff frequently we make it  a fuction i.e container)*/}
         {/* prop are just like arguments to ur function */}
         {filterrestro &&
