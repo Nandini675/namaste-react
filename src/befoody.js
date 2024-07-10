@@ -1,6 +1,6 @@
 import React, {lazy , Suspense, useEffect, useState} from "react";
 import ReactDOM from "react-dom/client";
-import Header from "./component/Header";// if u dont put extension over here still it will work
+import Header from "./component/header";// if u dont put extension over here still it will work
 import Body from "./component/Body";
 import { createBrowserRouter,RouterProvider,Outlet } from "react-router-dom";
 import About from "./component/About";
@@ -9,7 +9,10 @@ import Error from "./component/Error";
 import Restromenu from "./component/Restromenu";
 //import Grocery from "./component/Grocery";
 import UserContext from "./utils/UserContext";
- 
+ import { Provider } from "react-redux";
+import Appstore from "./utils/Appstore";
+
+  import Cart from "./component/Cart";
 
 const Grocery = lazy( ()=> import ("./component/Grocery"));
 
@@ -26,7 +29,9 @@ const data={
 }
 setusername(data.name)
   },[])
-    return(
+ 
+    return( 
+      <Provider store={Appstore}>
       <UserContext.Provider  value=
       {{loggedinuser:username ,setusername}}>
        
@@ -38,6 +43,7 @@ setusername(data.name)
 
         </div>
         </UserContext.Provider> 
+        </Provider>
     );
 };
 const approuter= createBrowserRouter(
@@ -70,7 +76,12 @@ element: (<Suspense fallback={<h1>Loading.....</h1>}><Grocery/></Suspense>),
 {
   path:"/restraunts/:resId",
   element:<Restromenu/>,
+},
+{
+  path:"/cart",
+  element:<Cart/>,
 }
+
 
 ],
 errorElement:<Error/>

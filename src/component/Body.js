@@ -78,7 +78,7 @@ const Body = () => {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
         const json = await response.json();
-        //  console.log(json);
+        console.log(json);
   
         // Accessing nested properties safely
       // console.log(  json?.data?.cards[1]?.card?.card?.gridElements?.infoWithStyle?.restaurants
